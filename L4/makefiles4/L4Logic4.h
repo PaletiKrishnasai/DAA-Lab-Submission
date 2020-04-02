@@ -1,3 +1,5 @@
+//towers of hanoi 
+//author : Paleti Krishnasai
 #include<bits/stdc++.h>
 using namespace std;
 int TOH(int n,int a ,int b, int c)
