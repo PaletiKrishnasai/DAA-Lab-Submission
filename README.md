@@ -7,6 +7,15 @@ Code written as part of Object Oriented Algorithm Design and Analysis Practice L
         Darshan VSS            - CED18i056
         Yoga Sri Varshan       - CED18i058
         John Zakkam            - CED18i059
+ ## Deployment
+ To run the code enter the following in the the terminal fro the respective directory (LAB 1, LAB 2, and so on)
+ 
+
+* Once in the directory, type **make** to compile the respective files.
+* Once file is made, type **./output.out** to run the program.
+* Once the file is run, type **make clean** to clean the directory.
+* exit the directory and proceed with next
+ 
  
 #### Lab 1 :
 ``` 
