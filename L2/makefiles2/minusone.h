@@ -2,7 +2,7 @@
 #define nl endl
 #define ll long long int
 #define vl vector<ll>
-#define size 1<<20
+#define size 1000
 using namespace std;
 
 
