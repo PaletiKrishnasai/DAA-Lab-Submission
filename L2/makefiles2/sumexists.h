@@ -8,10 +8,10 @@ int sumexist(vl A,int p)
 {
 	int diff; 
 	int i,j;
-	for(i=0;i<A.size;i++)
+	for(i=0;i<A.size();i++)
 	{
 		diff=p-A[i];
-		for(j=0;j<A.size;j++)
+		for(j=0;j<A.size();j++)
 		{
 			if(i==j)
 				continue;
@@ -41,10 +41,10 @@ int sumexistbs(vl A,int p)
 {
 	int diff, exist;
 	int i;
-	for(i=0;i<A.size;i++)
+	for(i=0;i<A.size();i++)
 	{
 		diff=p=A[i];
-		exist=BinarySearch(A,0,A.size,diff);
+		exist=BinarySearch(A,0,A.size(),diff);
 	}
 	return exist;
 }
@@ -55,11 +55,11 @@ int sumexisthash(vl A,int p)
 {
 	int diff,h[1<<20];
 	int i;
-	for(i=0;i<A.size;i++)
+	for(i=0;i<A.size();i++)
 	{
 		h[A[i]]++;
 	}
-	for(i=0;i<A.size;i++)
+	for(i=0;i<A.size();i++)
 	{
 		diff=p-A[i];
 		if(h[diff]>=1&&diff!=A[i])
