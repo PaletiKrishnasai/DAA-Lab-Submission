@@ -8,7 +8,7 @@ Code written as part of Object Oriented Algorithm Design and Analysis Practice L
         Yoga Sri Varshan       - CED18i058
         John Zakkam            - CED18i059
  ## Deployment
- To run the code enter the following in the the terminal fro the respective directory (LAB 1, LAB 2, and so on)
+ To run the code enter the following in the the terminal for the respective directory (LAB 1, LAB 2, and so on)
  
 
 * Once in the directory, type **make** to compile the respective files.
