@@ -4,20 +4,19 @@ using namespace std;
 bool comparePairs(const std::pair<pair<int,int>,int>& lhs, const std::pair<pair<int,int>,int>& rhs){
   return lhs.second < rhs.second;
 }
-ll visit[100] = {0};
-ll checkCycle(vector<vector<ll>>t,ll v,ll u){
+ll checkCycle(vector<vector<ll>>t,ll v,ll u,ll visit[]){
  	ll i;
 	visit[v] = 1;
 	for(i=0;i<t.size();i++){
 		if(t[v][i]!=0){
-			if(visit[i]==1 && i!=u)
+			if(visit[i]==1 && i!=u){
+				cout<<i<<" "<<u<<" "<<v<<endl;
 				return 1;
+			}
 			else{
 				if(visit[i]==0){
-					return checkCycle(t,i,v);
+					return checkCycle(t,i,v,visit);
 				}
-				else
-					return 0;
 			}
 		}
 	}
@@ -59,8 +58,8 @@ void MST_Kruskal(vector<vector<ll>>g){
 				cout<<temp[j]<<" ";
 			cout<<endl;
 		}
-		visit[100]={0};
-		if(checkCycle(t,it->first.first,it->first.first)==0){
+		ll visit[100]={0};
+		if(checkCycle(t,it->first.first,it->first.first,visit)==0){
 			cout<<"include"<<endl;
 			MST.push_back(*it);
 		}
