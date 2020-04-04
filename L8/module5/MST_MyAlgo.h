@@ -1,138 +1,80 @@
-// C++ program to find Minimum Spanning Tree 
-// of a graph using Reverse Delete Algorithm 
-#include<bits/stdc++.h> 
-using namespace std; 
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long int
+bool comparePairs(const std::pair<pair<int,int>,int>& lhs, const std::pair<pair<int,int>,int>& rhs){
+  return lhs.second > rhs.second;
+}
+void checkConnectedness(vector<vector<ll>>t,ll v,ll visit[]){
+ 	ll i;
+	visit[v] = 1;
+	for(i=0;i<t.size();i++){
+		if(t[v][i]!=0 && visit[i]==0){
+			checkConnectedness(t,i,visit);
+		}
+	}
+}
+vector<pair<pair<ll,ll>,ll>>edges;
+vector<pair<pair<ll,ll>,ll>>MST;
+void MyAlgo(vector<vector<ll>>g){
+	ll i,j,n = g.size();
+	vector<vector<ll>>t(n);
+	for(i=0;i<n;i++){
+		t[i]=g[i];
+	}
+	for(i=0;i<n;i++){
+		for(j=i+1;j<n;j++){
+			pair<ll,ll>p;
+			p.first = i;
+			p.second = j;
+			if(g[i][j]!=0){
+				pair<pair<ll,ll>,ll>p2;
+				p2.first = p;
+				p2.second = g[i][j];
+				edges.push_back(p2);
+			}
+		}
+	}
+	sort(edges.begin(),edges.end(),comparePairs);
+	for(auto it = edges.begin();it!=edges.end();it++){
+		cout<<it->first.first<<","<<it->first.second<<" "<<it->second<<endl;
+		t[it->first.first][it->first.second]=0;
+		t[it->first.second][it->first.first]=0;
+		for(i=0;i<n;i++){
+			vector<ll>temp(n);
+			temp=t[i];
+			for(j=0;j<n;j++)
+				cout<<temp[j]<<" ";
+			cout<<endl;
+		}
+		ll visit[100]={0};
+		ll check = 0;
+		checkConnectedness(t,it->first.first,visit);
+		for(i=0;i<n;i++){
+			if(visit[i]==0)
+				check=1;
+		}
+		if(check){
+			cout<<"include"<<endl;
+			MST.push_back(*it);
+			t[it->first.first][it->first.second]=it->second;
+			t[it->first.second][it->first.first]=it->second;
+		}
+		else{
+			t[it->first.first][it->first.second]=0;
+			t[it->first.second][it->first.first]=0;
+		}
+	}
+	cout<<"The MST has edges -"<<endl;
+	for(auto it = MST.begin();it!=MST.end();it++){
+		cout<<it->first.first<<","<<it->first.second<<" "<<it->second<<endl;
 
-// Creating shortcut for an integer pair 
-typedef pair<int, int> iPair; 
-
-// Graph class represents a directed graph 
-// using adjacency list representation 
-class Graph 
-{ 
-	int V; // No. of vertices 
-	list<int> *adj; 
-	vector< pair<int, iPair> > edges; 
-	void DFS(int v, bool visited[]); 
-
-public: 
-	Graph(int V); // Constructor 
-
-	// function to add an edge to graph 
-	void addEdge(int u, int v, int w); 
-
-	// Returns true if graph is connected 
-	bool isConnected(); 
-
-	void reverseDeleteMST(); 
-}; 
-
-Graph::Graph(int V) 
-{ 
-	this->V = V; 
-	adj = new list<int>[V]; 
-} 
-
-void Graph::addEdge(int u, int v, int w) 
-{ 
-	adj[u].push_back(v); // Add w to v’s list. 
-	adj[v].push_back(u); // Add w to v’s list. 
-	edges.push_back({w, {u, v}}); 
-} 
-
-void Graph::DFS(int v, bool visited[]) 
-{ 
-	// Mark the current node as visited and print it 
-	visited[v] = true; 
-
-	// Recur for all the vertices adjacent to 
-	// this vertex 
-	list<int>::iterator i; 
-	for (i = adj[v].begin(); i != adj[v].end(); ++i) 
-		if (!visited[*i]) 
-			DFS(*i, visited); 
-} 
-
-// Returns true if given graph is connected, else false 
-bool Graph::isConnected() 
-{ 
-	bool visited[V]; 
-	memset(visited, false, sizeof(visited)); 
-
-	// Find all reachable vertices from first vertex 
-	DFS(0, visited); 
-
-	// If set of reachable vertices includes all, 
-	// return true. 
-	for (int i=1; i<V; i++) 
-		if (visited[i] == false) 
-			return false; 
-
-	return true; 
-} 
-
-// This function assumes that edge (u, v) 
-// exists in graph or not, 
-void Graph::reverseDeleteMST() 
-{ 
-	// Sort edges in increasing order on basis of cost 
-	sort(edges.begin(), edges.end()); 
-
-	int mst_wt = 0; // Initialize weight of MST 
-
-	cout << "Edges in MST\n"; 
-
-	// Iterate through all sorted edges in 
-	// decreasing order of weights 
-	for (int i=edges.size()-1; i>=0; i--) 
-	{ 
-		int u = edges[i].second.first; 
-		int v = edges[i].second.second; 
-
-		// Remove edge from undirected graph 
-		adj[u].remove(v); 
-		adj[v].remove(u); 
-
-		// Adding the edge back if removing it 
-		// causes disconnection. In this case this 
-		// edge becomes part of MST. 
-		if (isConnected() == false) 
-		{ 
-			adj[u].push_back(v); 
-			adj[v].push_back(u); 
-
-			// This edge is part of MST 
-			cout << "(" << u << ", " << v << ") \n"; 
-			mst_wt += edges[i].first; 
-		} 
-	} 
-
-	cout << "Total weight of MST is " << mst_wt; 
-} 
-
-// Driver code 
-int main() 
-{ 
-	// create the graph given in above fugure 
-	int V = 9; 
-	Graph g(V); 
-
-	// making above shown graph 
-	g.addEdge(0, 1, 4); 
-	g.addEdge(0, 7, 8); 
-	g.addEdge(1, 2, 8); 
-	g.addEdge(1, 7, 11); 
-	g.addEdge(2, 3, 7); 
-	g.addEdge(2, 8, 2); 
-	g.addEdge(2, 5, 4); 
-	g.addEdge(3, 4, 9); 
-	g.addEdge(3, 5, 14); 
-	g.addEdge(4, 5, 10); 
-	g.addEdge(5, 6, 2); 
-	g.addEdge(6, 7, 1); 
-	g.addEdge(6, 8, 6); 
-	g.addEdge(7, 8, 7); 
-
-	g.reverseDeleteMST(); 
-	return 0; 
-} 
+	}
+	cout<<"The MST graph is -"<<endl;
+	for(i=0;i<n;i++){
+		vector<ll>temp(n);
+		temp=t[i];
+		for(j=0;j<n;j++)
+			cout<<temp[j]<<" ";
+		cout<<endl;
+	}
+}
