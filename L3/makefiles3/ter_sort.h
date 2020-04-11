@@ -1,3 +1,5 @@
+//author : Paleti Krishnasai
+
 void ter_sort(int arr[],int n)
 {
     int endptr=0,tmp;
